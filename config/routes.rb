@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  resources :car_brands
+
   resources :manufacturers
 
   root 'search#index'
