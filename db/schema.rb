@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141115155724) do
+ActiveRecord::Schema.define(version: 20141115162541) do
 
   create_table "car_brands", force: true do |t|
     t.string   "name"
@@ -22,6 +22,13 @@ ActiveRecord::Schema.define(version: 20141115155724) do
 
   add_index "car_brands", ["manufacturer_id"], name: "index_car_brands_on_manufacturer_id"
 
+  create_table "car_brands_products", force: true do |t|
+    t.integer  "product_id"
+    t.integer  "car_brand_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "categories", force: true do |t|
     t.string   "name"
     t.integer  "parent_id"
@@ -29,8 +36,24 @@ ActiveRecord::Schema.define(version: 20141115155724) do
     t.datetime "updated_at"
   end
 
+  create_table "categories_products", force: true do |t|
+    t.integer  "product_id"
+    t.integer  "category_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "manufacturers", force: true do |t|
     t.string   "name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "products", force: true do |t|
+    t.string   "pid"
+    t.string   "name"
+    t.decimal  "price"
+    t.string   "url"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
