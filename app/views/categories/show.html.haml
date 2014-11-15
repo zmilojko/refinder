@@ -1,8 +1,33 @@
 %p#notice= notice
 
+%h1 Category: #{@category.name}
+
 %p
-  %b Name:
-  = @category.name
+  -if @category.parent
+    %string Parent category:
+    %span=link_to @category.parent.name, @category.parent
+  -else
+    %strong This is a top level category
+
+-if not @category.children.empty?
+  %p
+    %strong Subcategories:
+  -@category.children.each do |subcat|
+    %p
+      =link_to subcat.name, subcat
+-else
+  %p
+    %strong This category has no subcategories
+
+-if not @category.products.empty?
+  %p
+    %strong Products:
+  -@category.products.each do |prod|
+    %p
+      =link_to prod.name, prod
+-else
+  %p
+    %strong This category has no products
 
 = link_to 'Edit', edit_category_path(@category)
 \|

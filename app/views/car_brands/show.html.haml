@@ -1,11 +1,18 @@
 %p#notice= notice
 
-%p
-  %b Name:
-  = @car_brand.name
+%h1 #{@car_brand.manufacturer.name} #{@car_brand.name}
+
 %p
   %b Manufacturer:
-  = @car_brand.manufacturer
+  =link_to @car_brand.manufacturer.name, @car_brand.manufacturer
+
+%p
+  -if @car_brand.products.empty?
+    %strong This model has no dedicated parts.
+  -else
+    %strong Parts for this model:
+    -@car_brand.products.each do |product|
+      %p=link_to product.name, product
 
 = link_to 'Edit', edit_car_brand_path(@car_brand)
 \|

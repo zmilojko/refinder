@@ -1,17 +1,27 @@
 %p#notice= notice
 
+%h1=@product.name
+
 %p
   %b Pid:
   = @product.pid
-%p
-  %b Name:
-  = @product.name
 %p
   %b Price:
   = @product.price
 %p
   %b Url:
   = @product.url
+%p
+  %strong Found in categories:
+  =(@product.categories.map { |cat| link_to(cat.name, cat)}).join.html_safe
+%p
+  -if @product.car_brands.empty?
+    %strong This product does not fit anywhere specifically.
+  -else
+    %strong Fits to:
+    -@product.car_brands.each do |cb|
+      %p
+        =link_to "#{cb.manufacturer.name} #{cb.name}", cb
 
 = link_to 'Edit', edit_product_path(@product)
 \|
