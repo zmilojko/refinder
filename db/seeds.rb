@@ -1,1 +1,1 @@
-Dir[Rails.root.join('db/seeds/*.rb')].each { |file| load file }
+Dir[Rails.root.join('db/seeds/*.rb')].sort.each { |file| load file }
