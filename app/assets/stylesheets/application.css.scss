@@ -4,3 +4,17 @@
 @import "bootstrap-sprockets";
 @import "bootstrap";
 @import "zwr";
+
+#search_control, #second_page_title {
+  margin-top: 30px;
+}
+
+.search_input {
+  position: relative;
+}
+
+.search_input > .glyphicon {
+  position: absolute;
+  right: 0;
+  padding: 8px 14px;
+}

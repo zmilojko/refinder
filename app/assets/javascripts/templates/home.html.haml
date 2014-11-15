@@ -1,7 +1,6 @@
 .container
   %nav.navbar.navbar-static-top.navbar-inverse(role="navigation")
     .container-fluid
-      -# Title
       .navbar-header.pull-left
         %a.navbar-brand(href="#")
           =image_tag "logo.png", height: '20'
@@ -9,8 +8,9 @@
   #main
     .row
       .col-sm-6
-        %h1 Now we are loaded!
-        %p You are looking at the text that was placed here by the angular app!
+        .search_input
+          %input#search_control.form-control(type="search" placeholder="Search")
+          %span.glyphicon.glyphicon-search
       .col-sm-6
-        %h1 Doubling!
-        %p And we are in two columns
+        %h1#second_page_title Result!
+        %p This page should show the results
