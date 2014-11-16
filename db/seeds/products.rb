@@ -57,6 +57,7 @@ def find_car_brand(manufacturer_name, car_brand_name)
   end
 end
 
-
-main_category = Category.create! name: @biltema_products[:name]
-process_category main_category, @biltema_products, true
+ActiveRecord::Base.transaction do
+  main_category = Category.create! name: @biltema_products[:name]
+  process_category main_category, @biltema_products, true
+end
