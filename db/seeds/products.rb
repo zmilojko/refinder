@@ -37,28 +37,14 @@ def process_product(prod, prod_hash)
   end
 end
 
-@previously_accessed_models = []
+@models = Hash.new { |h, (manufacturer, brand)|
+  m = Manufacturer.find_or_create_by!(name: manufacturer)
+  cb = m.car_brands.find_or_create_by!(name: brand)
+  h[[manufacturer, brand]] = cb
+}
 
 def find_car_brand(manufacturer_name, car_brand_name)
-  # First we check if we have already used this model. In
-  # time, all the models will be in the list
-  model_index = @previously_accessed_models.index { |cb| cb.name == car_brand_name and cb.manufacturer == manufacturer_name }
-  if model_index.nil?
-    #We need to create the car brand, and maybe also the manufacturer
-    m = Manufacturer.find_by(name: manufacturer_name)
-    if m.nil?
-      m = Manufacturer.create! name: manufacturer_name
-    end
-    # Now we for sure have the manufacturer. Just get the car brand from it.
-    cb = m.car_brands.where(name: car_brand_name)
-    if cb.empty?
-      cb = m.car_brands.create!(name: car_brand_name)
-    end
-    @previously_accessed_models << cb
-    cb
-  else
-    cb = @previously_accessed_models[model_index]
-  end
+  @models[[manufacturer_name, car_brand_name]]
 end
 
 ActiveRecord::Base.transaction do
