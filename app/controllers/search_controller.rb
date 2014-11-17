@@ -36,24 +36,23 @@ class SearchController < ApplicationController
       end
     end unless params[:selected_groups].nil?
     
-    criteria = "2>1" if criteria.empty?
-    criteria = "#{criteria} and id in (select product_id from car_brands_products where car_brand_id in (#{models_to_search.empty? ? 0 : models_to_search.map{|m|m.id}.join(",")}))" unless models_to_search.empty?
-    criteria = "#{criteria} and id in (select product_id from categories_products where category_id in (#{categories_to_search.empty? ? 0 : categories_to_search.map{|m|m.id}.join(",")}))" unless categories_to_search.empty?
-    puts "Product search: #{criteria}"
-    
-    
-    
-    selected_products = Product.where(criteria)
+    unless criteria.empty? and models_to_search.empty? and categories_to_search.empty?
+      criteria = "2>1" if criteria.empty?
+      criteria = "#{criteria} and id in (select product_id from car_brands_products where car_brand_id in (#{models_to_search.empty? ? 0 : models_to_search.map{|m|m.id}.join(",")}))" unless models_to_search.empty?
+      criteria = "#{criteria} and id in (select product_id from categories_products where category_id in (#{categories_to_search.empty? ? 0 : categories_to_search.map{|m|m.id}.join(",")}))" unless categories_to_search.empty?
+      puts "Product search: #{criteria}"
 
-    @response[:products] = selected_products.map { |p| 
-      {
-        name: p.name,
-        id: p.id,
-        pid: p.pid,
-        price: p.price,
-        image_id: p.image_id
-      } }
-      
+      selected_products = Product.where(criteria)
+
+      @response[:products] = selected_products.map { |p| {
+                                                           name: p.name,
+                                                           id: p.id,
+                                                           pid: p.pid,
+                                                           price: p.price,
+                                                           image_id: p.image_id
+                                                         } 
+                                                   }
+    end
     
     respond_to do |format|
       format.json { render json: @response }
