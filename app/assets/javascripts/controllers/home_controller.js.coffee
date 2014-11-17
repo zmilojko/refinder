@@ -9,7 +9,12 @@
       console.log "Text change, now it is #{$scope.criteria.text}"
       $http.post('/search.json', $scope.criteria)
       .then (server_response) ->
-        $scope.result_info = server_response.data
+        # replace the contents of groups rather than the array itself;
+        # this is so that we can use ng-init to assign the reference
+        # and let Angular take care of the rest of the data-binding
+        # junk
+        $scope.result_info.groups.length = 0
+        Array.prototype.push.apply($scope.result_info.groups, server_response.data.groups)
         console.log(server_response.data)
     $scope.handle_search_button_click = ->
       console.log "Search button clicked"
@@ -17,5 +22,5 @@
       $scope.showtips = not $scope.criteria.criteria_text
 
     # to be fetched from the server
-    $scope.result_info = {}
+    $scope.result_info = {groups: []}
 ]
