@@ -1,5 +1,5 @@
-.search_section.list-group-item(ng-repeat="category in categories")
-  .search_section_name
-    {{category.name}}
-  .search_section_content(ng-if="category.subcategories && category.subcategories.length > 0")
-    .search_section_item(ng-include="'category_tree.html'" ng-init="categories = category.subcategories")
+.search_section.list-group-item(ng-repeat="group in groups")
+  %div(class="group-box-{{group.type}}")
+    {{group.name}}
+  .search_section_content(ng-if="group.sub && group.sub.length > 0")
+    .search_section_item(ng-include="'category_tree.html'" ng-init="groups = group.sub")
