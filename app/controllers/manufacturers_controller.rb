@@ -4,7 +4,7 @@ class ManufacturersController < ApplicationController
   # GET /manufacturers
   # GET /manufacturers.json
   def index
-    @manufacturers = Manufacturer.all
+    @manufacturers = Manufacturer.all.order(:name)
   end
 
   # GET /manufacturers/1
