@@ -1,5 +1,7 @@
-.search_section.list-group-item(ng-repeat="item in sub")
-  %button.btn.btn-default.btn-sm(ng-class="'item-box-' + (item.type || 'untyped')" ng-click="add_group(item)")
+%span(ng-switch="item.type" ng-repeat="item in sub")
+  .search_section.list-group-item(ng-class="'item-box-' + (item.type || 'untyped')" ng-switch-when="group-to-show")
     {{item.name}}
-  .search_section_content(ng-if="item.sub && item.sub.length > 0")
-    .search_section_item(ng-include="'category_tree.html'" ng-init="sub = item.sub")
+    .search_section_content(ng-if="item.sub && item.sub.length > 0")
+      .search_section_item(ng-include="'category_tree.html'" ng-init="sub = item.sub")
+  %button.btn.btn-default.btn-sm(ng-class="'item-box-' + (item.type || 'untyped')" ng-click="add_group(item)" ng-switch-default)
+    {{item.name}}
