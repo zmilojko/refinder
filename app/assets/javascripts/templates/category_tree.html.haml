@@ -1,0 +1,5 @@
+.search_section.list-group-item(ng-repeat="category in categories")
+  .search_section_name
+    {{category.name}}
+  .search_section_content(ng-if="category.subcategories && category.subcategories.length > 0")
+    .search_section_item(ng-include="'category_tree.html'" ng-init="categories = category.subcategories")

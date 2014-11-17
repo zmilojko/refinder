@@ -5,11 +5,11 @@
 @import "bootstrap";
 @import "zwr";
 
-#search_control, #second_page_title {
+#first_page_title, #second_page_title {
   margin-top: 30px;
 }
 
-.search_input {
+.search_input, .search_tips {
   position: relative;
 }
 
@@ -17,4 +17,12 @@
   position: absolute;
   right: 0;
   padding: 8px 14px;
+}
+
+.search_tips {
+  border: 1px blue;
+}
+
+.search_section_name {
+  margin-bottom: 4px;
 }
