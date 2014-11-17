@@ -1,5 +1,5 @@
 .search_section.list-group-item(ng-repeat="group in sub")
-  %div(class="group-box-{{group.type}}")
+  %div(class="group-box-{{group.type}}" ng-click="add_group(group)")
     {{group.name}}
   .search_section_content(ng-if="group.sub && group.sub.length > 0")
     .search_section_item(ng-include="'category_tree.html'" ng-init="sub = group.sub")

@@ -10,7 +10,7 @@
       .col-sm-6
         #first_page_title.search_tips.list-group
           .list-group-item
-            %button.btn.btn-default.btn-sm(type="button" ng-repeat="cat in criteria.selected_categories" ng-click="unselect_category($index)")
+            %button.btn.btn-default.btn-sm(type="button" ng-repeat="cat in criteria.selected_groups" ng-click="unselect_group($index)")
               {{cat}}
               %span.glyphicon.glyphicon-remove(aria-hidden="true")
             .search_input
