@@ -1,13 +1,14 @@
 class SearchController < ApplicationController
+  respond_to :html, :json
   def index
     render layout: false
   end
 
   def query
-    response = { under_development: true }
+    puts params
+    @response = { under_development: true }
     respond_to do |format|
-      format.html { redirect_to root_path }
-      format.json { render response }
+      format.json { render json: @response }
     end
   end
 end
