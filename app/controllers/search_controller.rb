@@ -23,7 +23,7 @@ class SearchController < ApplicationController
     
     criteria = s.split.select{|word| word.length >= 4}.map{|word| "name like '%#{word}%'"}.join(" or")
     puts "Product search: #{criteria}"
-    @response[:products] = Product.where(criteria).map { |p| {name: p.name, id: p.id} }
+    @response[:products] = Product.where(criteria).map { |p| {name: p.name, id: p.id, pid: p.pid} }
       
     
     respond_to do |format|
