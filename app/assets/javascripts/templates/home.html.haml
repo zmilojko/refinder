@@ -24,7 +24,7 @@
                 Search by entering car manufacturer, model, year of manufacturing, category
                 or some text from the product, for instance: "opel astra 1999 jarrupalat".
                 Tips will show when you enter at least 3 characters of each word.
-            .search_section.list-group-item(ng-init="groups = result_info.groups" ng-include="'category_tree.html'")
+            .search_section.list-group-item(ng-init="sub = result_info.groups" ng-include="'category_tree.html'")
       .col-sm-6
         #search_results.list-group
           .search_result.list-group-item(ng-repeat="product in result_info.products | limitTo:10")
