@@ -26,5 +26,14 @@
                 Tips will show when you enter at least 3 characters of each word.
             .search_section.list-group-item(ng-init="groups = result_info.groups" ng-include="'category_tree.html'")
       .col-sm-6
-        %h1#second_page_title Result!
-        %p This page should show the results
+        #search_results.list-group
+          .search_result.list-group-item(ng-repeat="product in result_info.products | limitTo:10")
+            .row
+              .col-sm-6
+                %h3 {{product.name}}
+                %p
+                  %strong Price:
+                  %span {{product.price}}
+              .col-sm-6 
+                -#%img.product_img(src="http://images.biltema.com/PAXToImageService.svc/product/medium/20000{{product.pid}}" alt="{{product.name}}")
+            
