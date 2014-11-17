@@ -5,6 +5,8 @@ Product.delete_all
 Manufacturer.delete_all
 CarBrand.delete_all
 
+$product_creation_counter = 0
+
 def process_category(cat, cat_hash, top_level)
   cat_hash[:subcategories].each do |subcat_hash|
     subcat = cat.children.create!(name: subcat_hash[:name])
@@ -13,7 +15,8 @@ def process_category(cat, cat_hash, top_level)
   end if cat_hash[:subcategories]
   
   cat_hash[:products].each do |product_hash|
-    puts "creating product #{product_hash[:name]}"
+    $product_creation_counter = $product_creation_counter + 1
+    puts "creating product #{product_hash[:name]} (#{$product_creation_counter})"
     prod = cat.products.create! pid: product_hash[:pid],
                                 name: product_hash[:name],
                                 price: product_hash[:price],
