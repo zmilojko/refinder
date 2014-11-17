@@ -2,9 +2,9 @@
   '$scope', '$http', ($scope, $http) ->
     $scope.criteria =
       text: ""
-      selected_categories: ["Jarrupalat", "foo", "bar", "baz", "qux"]
-    $scope.unselect_category = (index) ->
-        $scope.criteria.selected_categories.splice(index, 1)
+      selected_groups: []
+    $scope.unselect_group = (index) ->
+        $scope.criteria.selected_groups.splice(index, 1)
     $scope.handle_search_criteria_change = ->
       console.log "Text change, now it is #{$scope.criteria.text}"
       $http.post('/search.json', $scope.criteria)
@@ -20,7 +20,7 @@
       console.log "Search button clicked"
     $scope.input_focus_changed = ($event) ->
       $scope.showtips = not $scope.criteria.criteria_text
-
-    # to be fetched from the server
+    $scope.add_group = (group) ->
+        $scope.criteria.selected_groups.push(group.name)
     $scope.result_info = {groups: []}
 ]
