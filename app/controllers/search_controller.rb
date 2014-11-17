@@ -7,16 +7,25 @@ class SearchController < ApplicationController
   def query
     s = params[:text]
     puts "Text criteria: #{s}"
-    @response = { under_development: true }
+    @response = {}
     @response[:groups] = []
     @response[:groups] << {
       name: "Select car model",
-      sub: Manufacturer.all.map { |m| { name: m.name, type: :manufacturer } }
+      base_url: "/categories/",
+      sub: Manufacturer.all.map { |m| { name: m.name, type: :manufacturer, id: m.id } }
     }
     @response[:groups] << {
       name: "Categories",
-      sub: Category.where(parent_id: 1).map { |m| { name: m.name, type: :category } }
+      base_url: "/categories/",
+      sub: Category.where(parent_id: 1).map { |c| { name: c.name, type: :category, id: c.id } }
     }
+    @response[:products_url] = "/products/"
+    
+    criteria = s.split.select{|word| word.length >= 4}.map{|word| "name like '%#{word}%'"}.join(" or")
+    puts "Product search: #{criteria}"
+    @response[:products] = Product.where(criteria).map { |p| {name: p.name, id: p.id} }
+      
+    
     respond_to do |format|
       format.json { render json: @response }
     end
