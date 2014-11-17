@@ -16,6 +16,7 @@
         # junk
         $scope.result_info.groups.length = 0
         Array.prototype.push.apply($scope.result_info.groups, server_response.data.groups)
+        $scope.result_info.products = server_response.data.products
         console.log(server_response.data)
 
     $scope.handle_search_criteria_change = ->
