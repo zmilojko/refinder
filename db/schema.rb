@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141115162541) do
+ActiveRecord::Schema.define(version: 20141117162027) do
 
   create_table "car_brands", force: true do |t|
     t.string   "name"
@@ -56,6 +56,7 @@ ActiveRecord::Schema.define(version: 20141115162541) do
     t.string   "url"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "image_id"
   end
 
 end

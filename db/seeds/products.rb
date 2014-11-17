@@ -16,7 +16,8 @@ def process_category(cat, cat_hash, top_level)
     puts "creating product #{product_hash[:name]}"
     prod = cat.products.create! pid: product_hash[:pid],
                                 name: product_hash[:name],
-                                price: product_hash[:price]
+                                price: product_hash[:price],
+                                image_id: product_hash[:image_id]
     process_product prod, product_hash
   end if cat_hash[:products]
 end

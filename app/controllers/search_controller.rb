@@ -29,6 +29,7 @@ class SearchController < ApplicationController
         id: p.id,
         pid: p.pid,
         price: p.price,
+        image_id: p.image_id
       } }
       
     
