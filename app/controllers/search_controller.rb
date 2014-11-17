@@ -10,14 +10,16 @@ class SearchController < ApplicationController
     @response = {}
     @response[:groups] = []
     @response[:groups] << {
-      name: "Select car model",
-      base_url: "/categories/",
-      sub: Manufacturer.all.map { |m| { name: m.name, type: :manufacturer, id: m.id } }
-    }
-    @response[:groups] << {
       name: "Categories",
+      type: :group_to_show,
       base_url: "/categories/",
       sub: Category.where(parent_id: 1).map { |c| { name: c.name, type: :category, id: c.id } }
+    }
+    @response[:groups] << {
+      name: "Select car model",
+      type: :group_to_show,
+      base_url: "/categories/",
+      sub: Manufacturer.all.map { |m| { name: m.name, type: :manufacturer, id: m.id } }
     }
     @response[:products_url] = "/products/"
     
