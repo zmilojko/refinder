@@ -9,13 +9,13 @@
     .row
       .col-sm-6
         #first_page_title.search_tips.list-group
-          .search_criteria_container
-            %button.btn.btn-default.btn-xs(search-item type="button" ng-repeat="item in criteria.selected_groups" ng-click="unselect_group($index)")
+          .search_criteria_container.list-group-item
+            %button.btn.btn-default.btn-xs.selected_criteria(search-item type="button" ng-repeat="item in criteria.selected_groups" ng-click="unselect_group($index)")
               {{item.name_selected || item.name}}
               %span.glyphicon.glyphicon-remove(aria-hidden="true")
             .search_input
-              %input.search_text_box#search_control.form-control(type="search" placeholder="Search" ng-change="handle_search_criteria_change()" ng-model="criteria.text" ng-focus="input_focus_changed($event)")
-              %span.glyphicon.glyphicon-search(ng-click="handle_search_button_click()")
+              %input#search_control.search_text_box(type="search" placeholder="Search" ng-change="handle_search_criteria_change()" ng-model="criteria.text" ng-focus="input_focus_changed($event)")
+            %span.glyphicon.glyphicon-search(ng-click="handle_search_button_click()")
           .search_section.list-group-item(ng-if="showtips && !criteria.text")
             %div
               %p
