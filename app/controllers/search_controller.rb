@@ -5,24 +5,43 @@ class SearchController < ApplicationController
   end
 
   def query
-    s = params[:text]
-    puts "Text criteria: #{s}"
+    s_words = params[:text].split
+    puts "Text criteria: #{s_words}"
     @response = {}
-    @response[:groups] = []
-    @response[:groups] << {
-      name: "Categories",
-      type: :group_to_show,
-      base_url: "/categories/",
-      sub: Category.where(parent_id: 1).map { |c| { name: c.name, type: :category, id: c.id } }
+    @response = { 
+      groups: [], 
+      products_url: "/products/", 
+      products: []
     }
-    @response[:groups] << {
-      name: "Select car model",
-      type: :group_to_show,
-      base_url: "/categories/",
-      sub: Manufacturer.all.map { |m| { name: m.name, type: :manufacturer, id: m.id } }
-    }
-    @response[:products_url] = "/products/"
+
+    s_words.select{|word| word.length >= 2}.each do |word|
+      # 1. Searching categories based on text input
+      #    Use words of 2-3 letters for top level categories only,
+      #    words of 4+ letters for any category.
+      results = Category.where("#{"parent_id = 1 and " if word.length < 4}name like '%#{word}%'").map { |c| { name: c.name, type: :category, id: c.id } }
+      @response[:groups] << {
+        name: "Categories",
+        type: :group_to_show,
+        base_url: "/categories/",
+        sub: results,
+        replace: word,
+      } unless results.empty?
+      # 2. Searching manufacturers based on text input
+      results = Manufacturer.where("name like '%#{word}%'").map { |m| { name: m.name, type: :manufacturer, id: m.id } }
+      @response[:groups] << {
+        name: "Select car model",
+        type: :group_to_show,
+        base_url: "/categories/",
+        sub: results,
+        replace: word,
+      } unless results.empty?
+    end
+
+    # 3. Subcategories of selected categories
+    # 4. Supercategories of selected categories
+    # 5. Models of selected manufacturers
     
+    # 6. Products based on text input
     criteria = s.split.select{|word| word.length >= 4}.map{|word| "name like '%#{word}%'"}.join(" or")
     models_to_search = []
     categories_to_search = []
