@@ -23,6 +23,11 @@ class SearchController < ApplicationController
       #    Use words of 2-3 letters for top level categories only,
       #    words of 4+ letters for any category.
       results = Category.where("#{"parent_id = 1 and " if word.length < 4}name like '%#{word}%'").map { |c| { name: c.name, type: :category, id: c.id } }
+      results.select! do |c| 
+        c unless params[:selected_groups].any? do |g|
+          g['type'] == 'category' and g['id'] == c[:id]
+        end
+      end
       @response[:groups] << {
         name: "Categories",
         type: :group_to_show,
@@ -32,6 +37,11 @@ class SearchController < ApplicationController
       } unless results.empty?
       # 2. Searching manufacturers based on text input
       results = Manufacturer.where("name like '%#{word}%'").map { |m| { name: m.name, type: :manufacturer, id: m.id } }
+      results.select! do |c| 
+        c unless params[:selected_groups].any? do |g|
+          g['type'] == 'manufacturer' and g['id'] == c[:id]
+        end
+      end
       @response[:groups] << {
         name: "Select car model",
         type: :group_to_show,
