@@ -108,6 +108,10 @@ class SearchController < ApplicationController
         g['type'] == c[:type].to_s and g['id'] == c[:id]
       end
     end
+    results.each { |r|
+      r[:replace] = response[:replace]
+      r[:replace_box] = response[:replace_box]
+    }
     response[:type] = :group_to_show
     response[:sub] = results
     @response[:groups] << response unless results.empty?
