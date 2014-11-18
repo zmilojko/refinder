@@ -22,39 +22,47 @@ class SearchController < ApplicationController
       # 1. Searching categories based on text input
       #    Use words of 2-3 letters for top level categories only,
       #    words of 4+ letters for any category.
-      results = Category.where("#{"parent_id = 1 and " if word.length < 4}name like '%#{word}%'").map { |c| { name: c.name, type: :category, id: c.id } }
-      results.select! do |c| 
-        c unless params[:selected_groups].any? do |g|
-          g['type'] == 'category' and g['id'] == c[:id]
-        end
-      end
-      @response[:groups] << {
-        name: "Categories",
-        type: :group_to_show,
-        base_url: "/categories/",
-        sub: results,
+      add_group_to_response name: 'Click to select one or more categories', 
+        url: '/categories/', 
         replace: word,
-      } unless results.empty?
+        params: params,
+        results: Category.where("#{"parent_id = 1 and " if word.length < 4}name like '%#{word}%'").map { |c| { name: c.name, type: :category, id: c.id } }
+      
       # 2. Searching manufacturers based on text input
-      results = Manufacturer.where("name like '%#{word}%'").map { |m| { name: m.name, type: :manufacturer, id: m.id } }
-      results.select! do |c| 
-        c unless params[:selected_groups].any? do |g|
-          g['type'] == 'manufacturer' and g['id'] == c[:id]
-        end
-      end
-      @response[:groups] << {
-        name: "Select car model",
-        type: :group_to_show,
-        base_url: "/categories/",
-        sub: results,
+      add_group_to_response name: 'Click to select your car', 
+        url: '/manufacturers/', 
         replace: word,
-      } unless results.empty?
+        params: params,
+        results: Manufacturer.where("name like '%#{word}%'").map { |m| { name: m.name, type: :manufacturer, id: m.id } }
     end
 
-    # 3. Subcategories of selected categories
-    # 4. Supercategories of selected categories
-    # 5. Models of selected manufacturers
-    
+    params[:selected_groups].each do |g|
+      case g['type']
+      when 'category'
+        # 3. Subcategories of selected categories
+        add_group_to_response name: "Narrow your search in category #{g['name']}", 
+        url: '/categories/', 
+        params: params,
+        replace_box: { type: :category, id: g['id']},
+        results: Category.find(g['id']).children.map { |c| { name: c.name, type: :category, id: c.id } }
+
+        # 4. Supercategories of selected categories
+        parent_category = Category.find(g['id']).parent
+        add_group_to_response name: "Widen your search in category #{g['name']}", 
+        url: '/categories/', 
+        params: params,
+        replace_box: { type: :category, id: g['id']},
+        results: [parent_category].
+          map { |c| { name: c.name, type: :category, id: c.id } } unless parent_category.nil?
+      when 'manufacturer'
+        # 5. Models of selected manufacturers
+        add_group_to_response name: "Select model for #{g['name']}", 
+        url: '/car_brands/', 
+        params: params,
+        replace_box: { type: :manufacturer, id: g['id']},
+        results: CarBrand.where(manufacturer_id: g['id']).map { |b| { name: b.name, name_selected: "#{b.manufacturer.name} #{b.name}", type: :car_brand, id: b.id } }
+      end
+    end
     # 6. Products based on text input
     criteria = s.split.select{|word| word.length >= 4}.map{|word| "name like '%#{word}%'"}.join(" or")
     models_to_search = []
@@ -90,6 +98,25 @@ class SearchController < ApplicationController
     respond_to do |format|
       format.json { render json: @response }
     end
+  end
+  
+  private
+
+  def add_group_to_response(name: nil, url: nil, results: [], replace: "", params: nil, replace_box: nil)
+    raise "must specify name, url, params" if name.nil? or url.nil? or params.nil?
+    results.select! do |c| 
+      c unless params[:selected_groups].any? do |g|
+        g['type'] == c[:type].to_s and g['id'] == c[:id]
+      end
+    end
+    @response[:groups] << {
+      name: name,
+      type: :group_to_show,
+      base_url: url,
+      sub: results,
+      replace: replace,
+      replace_box: replace_box,
+    } unless results.empty?
   end
   
   def include_this_and_children(categories_to_search, c)
