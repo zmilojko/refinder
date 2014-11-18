@@ -26,14 +26,14 @@ class SearchController < ApplicationController
         url: '/categories/', 
         replace: word,
         params: params,
-        results: Category.where("#{"parent_id = 1 and " if word.length < 4}name like '%#{word}%'").map { |c| { name: c.name, type: :category, id: c.id } }
+        results: Category.where("#{"parent_id = 1 and " if word.length < 4}name like '%#{word}%'")
       
       # 2. Searching manufacturers based on text input
       add_group_to_response name: 'Click to select your car', 
         url: '/manufacturers/', 
         replace: word,
         params: params,
-        results: Manufacturer.where("name like '%#{word}%'").map { |m| { name: m.name, type: :manufacturer, id: m.id } }
+        results: Manufacturer.where("name like '%#{word}%'")
     end
 
     params[:selected_groups].each do |g|
@@ -44,7 +44,7 @@ class SearchController < ApplicationController
         url: '/categories/', 
         params: params,
         replace_box: { type: :category, id: g['id']},
-        results: Category.find(g['id']).children.map { |c| { name: c.name, type: :category, id: c.id } }
+        results: Category.find(g['id']).children
 
         # 4. Supercategories of selected categories
         parent_category = Category.find(g['id']).parent
@@ -52,15 +52,14 @@ class SearchController < ApplicationController
         url: '/categories/', 
         params: params,
         replace_box: { type: :category, id: g['id']},
-        results: [parent_category].
-          map { |c| { name: c.name, type: :category, id: c.id } } unless parent_category.nil?
+        results: [parent_category] unless parent_category.nil?
       when 'manufacturer'
         # 5. Models of selected manufacturers
         add_group_to_response name: "Select model for #{g['name']}", 
         url: '/car_brands/', 
         params: params,
         replace_box: { type: :manufacturer, id: g['id']},
-        results: CarBrand.where(manufacturer_id: g['id']).map { |b| { name: b.name, name_selected: "#{b.manufacturer.name} #{b.name}", type: :car_brand, id: b.id } }
+        results: CarBrand.where(manufacturer_id: g['id'])
       end
     end
     # 6. Products based on text input
@@ -85,14 +84,7 @@ class SearchController < ApplicationController
 
       selected_products = Product.where(criteria)
 
-      @response[:products] = selected_products.map { |p| {
-                                                           name: p.name,
-                                                           id: p.id,
-                                                           pid: p.pid,
-                                                           price: p.price,
-                                                           image_id: p.image_id
-                                                         } 
-                                                   }
+      @response[:products] = selected_products.map { |p| p.box_hash }
     end
     
     respond_to do |format|
@@ -103,6 +95,9 @@ class SearchController < ApplicationController
   private
 
   def add_group_to_response(results: [], params: nil, **response)
+    # the following line cannot be map! results is activerecord::something, 
+    # and this turns it into array, then we can use select!
+    results = results.map { |p| p.box_hash }
     results.select! do |c| 
       c unless params[:selected_groups].any? do |g|
         g['type'] == c[:type].to_s and g['id'] == c[:id]
@@ -110,7 +105,7 @@ class SearchController < ApplicationController
     end
     response[:type] = :group_to_show
     response[:sub] = results
-    @response[:groups] << response
+    @response[:groups] << response unless results.empty?
   end
   
   def include_this_and_children(categories_to_search, c)
