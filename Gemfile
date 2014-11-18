@@ -49,3 +49,4 @@ gem 'html2haml'
 gem 'factory_girl_rails', '~> 4.0'
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw]
 gem 'tzinfo', platforms: [:mingw, :mswin, :x64_mingw]
+gem 'lodash-rails'

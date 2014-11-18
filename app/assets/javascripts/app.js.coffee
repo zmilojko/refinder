@@ -9,6 +9,7 @@
 #= require_tree ./services
 #= require_tree ./controllers
 #= require angular-ui-bootstrap
+#= require lodash
 
 @refinder_carpart_demo_module = angular.module('refinder-carpart-demo', [
   'ngRoute', 
@@ -17,6 +18,11 @@
   'ui.bootstrap',
   'LocalStorageModule',
   ])
+
+@refinder_carpart_demo_module
+    # allow DI for use in controllers, unit tests
+    .constant('_', window._)
+
 
 @refinder_carpart_demo_module.config(['$routeProvider', ($routeProvider) ->
   $routeProvider.
