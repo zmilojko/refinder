@@ -3,7 +3,7 @@ class Product < ActiveRecord::Base
   has_and_belongs_to_many :car_brands
   
   def target_url
-    "#{categories[0].target_url}#{name.gsub " ", "-"}-#{pid}/"
+    url || "#{categories[0].target_url}#{name.gsub " ", "-"}-#{pid}/"
   end
   
   def box_hash
@@ -15,5 +15,14 @@ class Product < ActiveRecord::Base
       image_id: image_id,
       url: target_url,
     }
+  end
+  
+  def self.create_urls
+    ActiveRecord::Base.transaction do
+      self.all.each do |p|
+        p.url = p.target_url
+        p.save
+      end
+    end
   end
 end

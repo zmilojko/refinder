@@ -10,7 +10,7 @@ class Category < ActiveRecord::Base
   has_and_belongs_to_many :products
 
   def target_url
-    if parent.nil?
+    url || if parent.nil?
       "http://www.biltema.fi/fi/Autoilu---MP/Autonvaraosat/"
     else
       "#{parent.target_url}#{name.gsub " ", "-"}/"
@@ -24,5 +24,14 @@ class Category < ActiveRecord::Base
       id: id,
       url: target_url,
     }
+  end
+  
+  def self.create_urls
+    ActiveRecord::Base.transaction do
+      self.all.each do |p|
+        p.url = p.target_url
+        p.save
+      end
+    end
   end
 end
