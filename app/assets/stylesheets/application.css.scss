@@ -9,6 +9,10 @@
   margin-top: 30px;
 }
 
+.search_input {
+    display: flex;
+}
+
 .search_input, .search_tips {
   position: relative;
 }
@@ -17,6 +21,25 @@
   position: absolute;
   right: 0;
   padding: 8px 14px;
+}
+
+.search_criteria_container {
+    display: -webkit-flex;
+    display: flex;
+    -webkit-flex-wrap: wrap;
+    flex-wrap: wrap;
+}
+
+.search_input {
+    -webkit-flex: 1 1;
+    flex: 1 1;
+    min-width: 20em;
+}
+
+.search_text_box {
+    border: 0 none !important;
+    margin: 0 !important;
+    box-shadow: none;
 }
 
 .search_tips {

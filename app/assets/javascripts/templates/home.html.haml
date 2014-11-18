@@ -9,19 +9,19 @@
     .row
       .col-sm-6
         #first_page_title.search_tips.list-group
-          .list-group-item
-            %button.btn.btn-default.btn-sm(search-item type="button" ng-repeat="item in criteria.selected_groups" ng-click="unselect_group($index)")
+          .search_criteria_container
+            %button.btn.btn-default.btn-xs(search-item type="button" ng-repeat="item in criteria.selected_groups" ng-click="unselect_group($index)")
               {{item.name}}
               %span.glyphicon.glyphicon-remove(aria-hidden="true")
             .search_input
-              %input#search_control.form-control(type="search" placeholder="Search" ng-change="handle_search_criteria_change()" ng-model="criteria.text" ng-focus="input_focus_changed($event)")
+              %input.search_text_box#search_control.form-control(type="search" placeholder="Search" ng-change="handle_search_criteria_change()" ng-model="criteria.text" ng-focus="input_focus_changed($event)")
               %span.glyphicon.glyphicon-search(ng-click="handle_search_button_click()")
-            .search_section.list-group-item(ng-if="showtips && !criteria.text")
-              %div
-                %p
-                  Start type what you are searching for: your car model, product category 
-                  or product name.
-            .search_section(ng-init="sub = result_info.groups" ng-include="'category_tree.html'" ng-if="result_info.groups")
+          .search_section.list-group-item(ng-if="showtips && !criteria.text")
+            %div
+              %p
+                Start type what you are searching for: your car model, product category 
+                or product name.
+          .search_section(ng-init="sub = result_info.groups" ng-include="'category_tree.html'" ng-if="result_info.groups")
       .col-sm-6
         #search_results.list-group
           .search_result.list-group-item(ng-repeat="product in result_info.products | limitTo:10")
