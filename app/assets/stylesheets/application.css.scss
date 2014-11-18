@@ -51,9 +51,15 @@
 }
 
 #search_control {
+  width: 100%;
+}
 
+#search_control:focus {
+  box-shadow: none;
+  outline: none;
 }
 
 .selected_criteria {
   margin-right: 4px;
+  margin-bottom: 2px;
 }
