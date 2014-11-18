@@ -5,6 +5,10 @@ class SearchController < ApplicationController
   end
 
   def query
+    # A little bit of sanitation - we prefer empty than nil
+    params[:text] ||= ""
+    params[:selected_groups] ||= []
+    
     s_words = params[:text].split
     puts "Text criteria: #{s_words}"
     @response = {}
