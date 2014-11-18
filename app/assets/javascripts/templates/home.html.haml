@@ -11,7 +11,7 @@
         #first_page_title.search_tips.list-group
           .search_criteria_container
             %button.btn.btn-default.btn-xs(search-item type="button" ng-repeat="item in criteria.selected_groups" ng-click="unselect_group($index)")
-              {{item.name}}
+              {{item.name_selected || item.name}}
               %span.glyphicon.glyphicon-remove(aria-hidden="true")
             .search_input
               %input.search_text_box#search_control.form-control(type="search" placeholder="Search" ng-change="handle_search_criteria_change()" ng-model="criteria.text" ng-focus="input_focus_changed($event)")
