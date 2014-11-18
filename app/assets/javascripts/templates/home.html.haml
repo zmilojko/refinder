@@ -16,8 +16,6 @@
             .search_input
               %input#search_control.form-control(type="search" placeholder="Search" ng-change="handle_search_criteria_change()" ng-model="criteria.text" ng-focus="input_focus_changed($event)")
               %span.glyphicon.glyphicon-search(ng-click="handle_search_button_click()")
-            %script.category-tree(type="text/ng-template")
-
             .search_section.list-group-item(ng-if="showtips && !criteria.text")
               %div
                 %p
