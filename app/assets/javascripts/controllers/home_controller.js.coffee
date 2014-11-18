@@ -30,7 +30,15 @@
     $scope.input_focus_changed = ($event) ->
       $scope.showtips = not $scope.criteria.criteria_text
     $scope.add_group = (group) ->
-        $scope.criteria.selected_groups.push(group)
+        # Once we've selected a group, the set of groups the backend
+        # sends us won't have that group included; but until we get a
+        # response back, we don't want to allow fast clickers to add
+        # the same group multiple times. This means we can do this
+        # check by object identity, which keeps things simple, since
+        # the id fields in our groups might be of different tables so
+        # we don't really want to depend on those.
+        unless group in $scope.criteria.selected_groups
+            $scope.criteria.selected_groups.push(group)
         $scope.do_search()
 
     $scope.result_info = {groups: []}
