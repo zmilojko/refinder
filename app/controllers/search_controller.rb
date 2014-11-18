@@ -5,6 +5,8 @@ class SearchController < ApplicationController
   end
 
   def query
+    Category.all
+    
     # A little bit of sanitation - we prefer empty than nil
     params[:text] ||= ""
     params[:selected_groups] ||= []
@@ -76,17 +78,17 @@ class SearchController < ApplicationController
       end
     end unless params[:selected_groups].nil?
     
-    unless criteria.empty? and models_to_search.empty? and categories_to_search.empty?
+    unless models_to_search.empty? and categories_to_search.empty?
       criteria = "2>1" if criteria.empty?
       criteria = "#{criteria} and id in (select product_id from car_brands_products where car_brand_id in (#{models_to_search.empty? ? 0 : models_to_search.map{|m|m.id}.join(",")}))" unless models_to_search.empty?
       criteria = "#{criteria} and id in (select product_id from categories_products where category_id in (#{categories_to_search.empty? ? 0 : categories_to_search.map{|m|m.id}.join(",")}))" unless categories_to_search.empty?
-      puts "Product search: #{criteria}"
-
-      selected_products = Product.where(criteria)
-
-      @response[:products] = selected_products.map { |p| p.box_hash }
     end
     
+    unless criteria.empty?
+      puts "Product search: #{criteria}"
+      selected_products = Product.where(criteria)
+      @response[:products] = selected_products.map { |p| p.box_hash }
+    end
     respond_to do |format|
       format.json { render json: @response }
     end
