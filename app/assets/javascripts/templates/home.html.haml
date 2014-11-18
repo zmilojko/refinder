@@ -16,7 +16,7 @@
             .search_input
               %input#search_control.search_text_box(type="search" placeholder="Search" ng-change="handle_search_criteria_change()" ng-model="criteria.text" ng-focus="input_focus_changed($event)")
             %span.glyphicon.glyphicon-search(ng-click="handle_search_button_click()")
-          .search_section.list-group-item(ng-if="showtips && !criteria.text")
+          -#.search_section.list-group-item(ng-if="showtips && !criteria.text")
             %div
               %p
                 Start type what you are searching for: your car model, product category 
