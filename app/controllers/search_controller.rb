@@ -102,21 +102,15 @@ class SearchController < ApplicationController
   
   private
 
-  def add_group_to_response(name: nil, url: nil, results: [], replace: "", params: nil, replace_box: nil)
-    raise "must specify name, url, params" if name.nil? or url.nil? or params.nil?
+  def add_group_to_response(results: [], params: nil, **response)
     results.select! do |c| 
       c unless params[:selected_groups].any? do |g|
         g['type'] == c[:type].to_s and g['id'] == c[:id]
       end
     end
-    @response[:groups] << {
-      name: name,
-      type: :group_to_show,
-      base_url: url,
-      sub: results,
-      replace: replace,
-      replace_box: replace_box,
-    } unless results.empty?
+    response[:type] = :group_to_show
+    response[:sub] = results
+    @response[:groups] << response
   end
   
   def include_this_and_children(categories_to_search, c)
