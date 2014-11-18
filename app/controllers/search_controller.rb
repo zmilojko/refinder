@@ -96,10 +96,13 @@ class SearchController < ApplicationController
   
   private
 
-  def add_group_to_response(results: [], params: nil, **response)
+  def add_group_to_response(response)
     # the following line cannot be map! results is activerecord::something, 
     # and this turns it into array, then we can use select!
-    results = results.map { |p| p.box_hash }
+    results = response[:results].map { |p| p.box_hash }
+    response[:results] = nil
+    params = response[:params]
+    response[:params] = nil
     results.select! do |c| 
       c unless params[:selected_groups].any? do |g|
         g['type'] == c[:type].to_s and g['id'] == c[:id]

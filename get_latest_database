@@ -1,0 +1,1 @@
+curl https://github.com/zmilojko/refinder/blob/database/db/development.sqlite3?raw=true -L > db/production.sqlite3
