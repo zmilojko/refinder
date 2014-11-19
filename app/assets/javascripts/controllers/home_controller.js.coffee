@@ -5,7 +5,7 @@
       selected_groups: []
     $scope.unselect_group = (index) ->
         $scope.criteria.selected_groups.splice(index, 1)
-        $scope.do_search()
+        $scope.request_search()
 
     $scope.add_group = (group) ->
         # Once we've selected a group, the set of groups the backend
@@ -20,12 +20,30 @@
         $scope.criteria.text = $scope.criteria.text.replace(group.replace, '') if group.replace
         $scope.criteria.selected_groups = _.reject($scope.criteria.selected_groups, (e) ->
             group.replace_box && e.id == group.replace_box.id && e.type == group.replace_box.type)
-        $scope.do_search()
+        $scope.request_search()
+
+    $scope.search_in_flight = false
+    $scope.next_search_requested = false
+
+    $scope.request_search = ->
+        console.log("search_in_flight:" )
+        console.log($scope.search_in_flight)
+        if $scope.search_in_flight
+            $scope.next_search_requested = true
+        else
+            $scope.do_search()
 
     $scope.do_search = ->
-      $http.post('/search.json', $scope.criteria)
-      .then (server_response) ->
-        $scope.update_from_server(server_response.data)
+        $scope.search_in_flight = true
+        console.log("do_search")
+        $http.post('/search.json', $scope.criteria)
+                .then (server_response) ->
+                        $scope.update_from_server(server_response.data)
+                        $scope.search_in_flight = false
+                        if $scope.next_search_requested
+                            $scope.do_search()
+                            $scope.next_search_requested = false
+                        $scope.next_search_requested = false
 
     $scope.update_from_server = (data) ->
         # replace the contents of groups rather than the array itself;
@@ -38,16 +56,16 @@
 
     $scope.handle_search_criteria_change = ->
         console.log "Text change, now it is #{$scope.criteria.text}"
-        $scope.do_search()
+        $scope.request_search()
 
     $scope.handle_search_button_click = ->
         console.log "Search button clicked"
-        $scope.do_search()
+        $scope.request_search()
 
     $scope.input_focus_changed = ($event) ->
       $scope.showtips = not $scope.criteria.criteria_text
 
     $scope.result_info = {groups: []}
 
-    $scope.do_search()
+    $scope.request_search()
 ]
