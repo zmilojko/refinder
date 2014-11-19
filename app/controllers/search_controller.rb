@@ -5,8 +5,6 @@ class SearchController < ApplicationController
   end
 
   def query
-    Category.all
-    
     # A little bit of sanitation - we prefer empty than nil
     params[:text] ||= ""
     params[:selected_groups] ||= []
@@ -65,7 +63,7 @@ class SearchController < ApplicationController
       end
     end
     # 6. Products based on text input
-    criteria = s.split.select{|word| word.length >= 4}.map{|word| "name like '%#{word}%'"}.join(" or")
+    criteria = s_words.select{|word| word.length >= 4}.map{|word| "name like '%#{word}%'"}.join(" or ")
     models_to_search = []
     categories_to_search = []
     params[:selected_groups].each do |g|
