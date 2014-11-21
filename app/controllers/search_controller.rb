@@ -43,25 +43,25 @@ class SearchController < ApplicationController
       when 'category'
         # 3. Subcategories of selected categories
         add_group_to_response name: "Narrow your search in category #{g['name']}", 
-        url: '/categories/', 
-        params: params,
-        replace_box: { type: :category, id: g['id']},
-        results: Category.find(g['id']).children
+          url: '/categories/', 
+          params: params,
+          replace_box: { type: :category, id: g['id']},
+          results: Category.find(g['id']).children
 
         # 4. Supercategories of selected categories
         parent_category = Category.find(g['id']).parent
         add_group_to_response name: "Widen your search in category #{g['name']}", 
-        url: '/categories/', 
-        params: params,
-        replace_box: { type: :category, id: g['id']},
-        results: [parent_category] unless parent_category.nil?
+          url: '/categories/', 
+          params: params,
+          replace_box: { type: :category, id: g['id']},
+          results: [parent_category] unless parent_category.nil?
       when 'manufacturer'
         # 5. Models of selected manufacturers
         add_group_to_response name: "Select model for #{g['name']}", 
-        url: '/car_brands/', 
-        params: params,
-        replace_box: { type: :manufacturer, id: g['id']},
-        results: CarBrand.where(manufacturer_id: g['id'])
+          url: '/car_brands/', 
+          params: params,
+          replace_box: { type: :manufacturer, id: g['id']},
+          results: CarBrand.where(manufacturer_id: g['id'])
       end
     end
     # 6. Products based on text input
@@ -72,6 +72,8 @@ class SearchController < ApplicationController
       case g[:type]
       when "manufacturer"
         models_to_search.push(*(Manufacturer.find(g[:id]).car_brands))
+      when "car_brand"
+        models_to_search << CarBrand.find(g[:id])
       when "category"
         c = Category.find(g[:id])
         include_this_and_children categories_to_search, c
