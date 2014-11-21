@@ -1,3 +1,5 @@
+# -*- encoding : utf-8 -*-
+
 class SearchController < ApplicationController
   respond_to :html, :json
   def index
