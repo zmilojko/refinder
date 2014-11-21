@@ -65,7 +65,9 @@ class SearchController < ApplicationController
       end
     end
     # 6. Products based on text input
-    criteria = s.split.select{|word| word.length >= 4}.map{|word| "name like '%#{word}%'"}.join(" or")
+    puts "s_words is #{s_words}"
+    criteria = s_words.select{|word| word.length >= 4}.map{|word| "name like '%#{word.gsub(/[öäÖÄoaOA]/,'_')}%'"}.join(" or")
+    puts "text_criteria is #{criteria}"
     models_to_search = []
     categories_to_search = []
     params[:selected_groups].each do |g|
