@@ -19,7 +19,8 @@ class SearchController < ApplicationController
     @response = { 
       groups: [], 
       products_url: "/products/", 
-      products: []
+      products: [],
+      qid: params[:qid],
     }
 
     s_words.select{|word| word.length >= 2}.each do |word|
