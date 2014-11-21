@@ -3,7 +3,8 @@ class Product < ActiveRecord::Base
   has_and_belongs_to_many :car_brands
   
   def target_url
-    url || "#{categories[0].target_url}#{name.gsub " ", "-"}-#{pid}/"
+    (url || "#{categories[0].target_url}#{name.gsub " ", "-"}-#{pid}/").
+      gsub("ä","a").gsub("Ä","A").gsub("ö","o").gsub("Ö","O")
   end
   
   def box_hash

@@ -28,14 +28,14 @@ class SearchController < ApplicationController
         url: '/categories/', 
         replace: word,
         params: params,
-        results: Category.where("#{"parent_id = 1 and " if word.length < 4}name like '%#{word}%'")
+        results: Category.where("#{"parent_id = 1 and " if word.length < 4}name like '%#{word.gsub(/[öäÖÄoaOA]/,'_')}%'")
       
       # 2. Searching manufacturers based on text input
       add_group_to_response name: 'Click to select your car', 
         url: '/manufacturers/', 
         replace: word,
         params: params,
-        results: Manufacturer.where("name like '%#{word}%'")
+        results: Manufacturer.where("name like '%#{word.gsub(/[öäÖÄoaOA]/,'_')}%'")
     end
 
     params[:selected_groups].each do |g|
