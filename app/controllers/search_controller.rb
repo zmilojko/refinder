@@ -69,7 +69,7 @@ class SearchController < ApplicationController
     end
     # 6. Products based on text input
     puts "s_words is #{s_words}"
-    criteria = s_words.select{|word| word.length >= 4}.map{|word| "name like '%#{word.gsub(/[öäÖÄoaOA]/,'_')}%'"}.join(" or")
+    criteria = s_words.select{|word| word.length >= 4}.map{|word| "name like '%#{word.gsub(/[öäÖÄoaOA]/,'_')}%'"}.join(" or ")
     puts "text_criteria is #{criteria}"
     models_to_search = []
     categories_to_search = []
