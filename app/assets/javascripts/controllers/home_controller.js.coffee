@@ -4,11 +4,13 @@
       text: ""
       selected_groups: []
       qid: 1
+    $scope.focusSearch = false
     $scope.search_status = 0
     $scope.hide_tips = false
     $scope.unselect_group = (index) ->
         $scope.criteria.selected_groups.splice(index, 1)
         $scope.do_search()
+        $scope.focus_search_input()
 
     $scope.add_group = (group) ->
         # Once we've selected a group, the set of groups the backend
@@ -24,7 +26,11 @@
         $scope.criteria.selected_groups = _.reject($scope.criteria.selected_groups, (e) ->
             group.replace_box && e.id == group.replace_box.id && e.type == group.replace_box.type)
         $scope.do_search()
-
+        $scope.focus_search_input()
+        
+    $scope.focus_search_input = ->
+      $scope.focusSearch = true
+      
     $scope.do_send_search_req = ->
       $scope.search_status = 1
       $http.post('/search.json', $scope.criteria)

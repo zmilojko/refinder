@@ -14,7 +14,7 @@
               {{item.name_selected || item.name}}
               %span.glyphicon.glyphicon-remove(aria-hidden="true")
             .search_input
-              %input#search_control.search_text_box(type="search" placeholder="Search" ng-change="handle_search_criteria_change()" ng-model="criteria.text" ng-focus="input_focus_changed($event)")
+              %input#search_control.search_text_box(search-input="focusSearch == true" type="search" placeholder="Search" ng-change="handle_search_criteria_change()" ng-model="criteria.text" ng-focus="input_focus_changed($event)" autofocus)
             %span.glyphicon.glyphicon-search(ng-click="handle_search_button_click()")
           %span.list-group-item.tip-container(ng-repeat="item in result_info.groups" ng-if="!hide_tips")
             %h4.list-group-item-heading.tip-header
