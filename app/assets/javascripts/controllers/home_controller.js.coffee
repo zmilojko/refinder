@@ -76,5 +76,23 @@
     $scope.clear_search = ->
       $scope.hide_tips = true
 
+    $scope.mouse_move_over_button = (sub) ->
+      console.log "mouse move over #{sub.name}"
+
+    $scope.input_keypressed = ($event) ->
+      console.log $event.keyCode
+      switch $event.keyCode
+        when 9  then # TAB
+        when 13 then # ENTER
+        when 8       # BACKSPACE
+          if $event.srcElement.selectionStart == 0 and $event.srcElement.selectionEnd == 0
+            $scope.criteria.selected_groups.splice(-1, 1)
+            $scope.do_search()
+        when 37 then # ARROW LEFT
+        when 38 then # ARROW UP
+        when 39 then # ARROW RIGHT
+        when 40 then # ARROW DOWN
+        else
+
     $scope.do_search()
 ]

@@ -14,12 +14,12 @@
               {{item.name_selected || item.name}}
               %span.glyphicon.glyphicon-remove(aria-hidden="true")
             .search_input
-              %input#search_control.search_text_box(search-input="focusSearch == true" type="search" placeholder="Search" ng-change="handle_search_criteria_change()" ng-model="criteria.text" ng-focus="input_focus_changed($event)" autofocus)
+              %input#search_control.search_text_box(search-input="focusSearch == true" type="search" placeholder="Search" ng-change="handle_search_criteria_change()" ng-model="criteria.text" ng-focus="input_focus_changed($event)" autofocus ng-keydown="input_keypressed($event)")
             %span.glyphicon.glyphicon-search(ng-click="handle_search_button_click()")
           %span.list-group-item.tip-container(ng-repeat="item in result_info.groups" ng-if="!hide_tips")
             %h4.list-group-item-heading.tip-header
               {{item.name}}:
-            %button.btn.btn-default.btn-xs.tip_button(search-item ng-click="add_group(sub)" ng-repeat="sub in item.sub")
+            %button.btn.btn-default.btn-xs.tip_button(search-item ng-click="add_group(sub)" ng-repeat="sub in item.sub" ng-mousemove="mouse_move_over_button(sub)")
               {{sub.name}}
             %span.glyphicon.glyphicon-remove(ng-click="clear_search()" ng-if="$index == 0")
       .col-sm-6
