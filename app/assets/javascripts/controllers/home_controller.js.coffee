@@ -4,6 +4,7 @@
       text: ""
       selected_groups: []
       qid: 1
+    $scope.search_status = 0
     $scope.unselect_group = (index) ->
         $scope.criteria.selected_groups.splice(index, 1)
         $scope.do_search()
@@ -23,12 +24,23 @@
             group.replace_box && e.id == group.replace_box.id && e.type == group.replace_box.type)
         $scope.do_search()
 
-    $scope.do_search = ->
-      $scope.criteria.qid++
+    $scope.do_send_search_req = ->
+      $scope.search_status = 1
       $http.post('/search.json', $scope.criteria)
-      .then (server_response) ->
-        if $scope.criteria.qid == $scope.criteria.qid
+        .then (server_response) ->
           $scope.update_from_server(server_response.data)
+          if $scope.search_status == 1
+            $scope.search_status = 0
+          else # $scope.search_status == 2
+            $scope.do_send_search_req()
+              
+    $scope.do_search = ->
+      if $scope.search_status == 0
+        $scope.do_send_search_req()
+      else 
+        $scope.search_status = 2
+        
+      
 
     $scope.update_from_server = (data) ->
         # replace the contents of groups rather than the array itself;
