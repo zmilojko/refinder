@@ -75,24 +75,65 @@
 
     $scope.clear_search = ->
       $scope.hide_tips = true
+      
+    $scope.markIfSelected = (sub) ->
+      if sub.is_selected
+        "selected_sub"
+      else
+        "btn-default"
 
     $scope.mouse_move_over_button = (sub) ->
-      console.log "mouse move over #{sub.name}"
+      for group in $scope.result_info.groups
+        for s in group.sub
+          s.is_selected = false
+      sub.is_selected = true
+
+    $scope.find_selected_sub = ->
+      for g, g_index in $scope.result_info.groups
+        for s, s_index in g.sub
+          if s.is_selected
+            return [g_index, s_index, g, s]
+      null
 
     $scope.input_keypressed = ($event) ->
-      console.log $event.keyCode
       switch $event.keyCode
-        when 9  then # TAB
-        when 13 then # ENTER
+        when 9, 13   # TAB, ENTER
+          if info = $scope.find_selected_sub()
+            $scope.add_group(info[3])
+          $event.preventDefault()
         when 8       # BACKSPACE
           if $event.srcElement.selectionStart == 0 and $event.srcElement.selectionEnd == 0
             $scope.criteria.selected_groups.splice(-1, 1)
             $scope.do_search()
-        when 37 then # ARROW LEFT
-        when 38 then # ARROW UP
-        when 39 then # ARROW RIGHT
-        when 40 then # ARROW DOWN
-        else
-
+        when 37      # ARROW LEFT
+          if info = $scope.find_selected_sub()
+            if info[1] > 0
+              $scope.result_info.groups[info[0]].sub[info[1]].is_selected = false
+              $scope.result_info.groups[info[0]].sub[info[1] - 1].is_selected = true
+              $event.preventDefault()
+        when 39      # ARROW RIGHT
+          if info = $scope.find_selected_sub()
+            if info[1] < $scope.result_info.groups[info[0]].sub.length - 1
+              $scope.result_info.groups[info[0]].sub[info[1]].is_selected = false
+              $scope.result_info.groups[info[0]].sub[info[1] + 1].is_selected = true
+              $event.preventDefault()
+        when 38      # ARROW UP
+          if info = $scope.find_selected_sub()
+            if info[0] > 0
+              $scope.result_info.groups[info[0]].sub[info[1]].is_selected = false
+              $scope.result_info.groups[info[0] - 1].sub[0].is_selected = true
+              $event.preventDefault()
+            else
+              $scope.result_info.groups[info[0]].sub[info[1]].is_selected = false
+              $event.preventDefault()
+        when 40      # ARROW DOWN
+          if info = $scope.find_selected_sub()
+            if info[0] < $scope.result_info.groups.length - 1
+              $scope.result_info.groups[info[0]].sub[info[1]].is_selected = false
+              $scope.result_info.groups[info[0] + 1].sub[0].is_selected = true
+              $event.preventDefault()
+          else
+            $scope.result_info.groups[0].sub[0].is_selected = true
+            $event.preventDefault()
     $scope.do_search()
 ]

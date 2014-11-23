@@ -70,3 +70,15 @@
   font-size: 14px;
   font-weight: 500;
 }
+
+.search_tips .btn-default:hover, .search_tips .btn-default:active {
+  color: #333333;
+  background-color: white;
+  border-color: #cccccc;
+}
+
+.selected_sub, .selected_sub:hover {
+  color: #333333;
+  background-color: #e6e6e6;
+  border-color: #adadad;
+}
