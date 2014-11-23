@@ -5,6 +5,7 @@
       selected_groups: []
       qid: 1
     $scope.search_status = 0
+    $scope.hide_tips = false
     $scope.unselect_group = (index) ->
         $scope.criteria.selected_groups.splice(index, 1)
         $scope.do_search()
@@ -39,6 +40,7 @@
         $scope.do_send_search_req()
       else 
         $scope.search_status = 2
+      $scope.hide_tips = false
         
       
 
@@ -61,8 +63,12 @@
 
     $scope.input_focus_changed = ($event) ->
       $scope.showtips = not $scope.criteria.criteria_text
+      $scope.hide_tips = false
 
     $scope.result_info = {groups: []}
+
+    $scope.clear_search = ->
+      $scope.hide_tips = true
 
     $scope.do_search()
 ]

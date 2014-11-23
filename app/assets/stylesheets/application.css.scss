@@ -13,11 +13,11 @@
     display: flex;
 }
 
-.search_input, .search_tips {
+.search_input, .search_tips, .tip-container {
   position: relative;
 }
 
-.search_input > .glyphicon {
+.search_input > .glyphicon, .tip-container > .glyphicon  {
   position: absolute;
   right: 0;
   padding: 8px 14px;
