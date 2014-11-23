@@ -27,14 +27,14 @@ class SearchController < ApplicationController
       # 1. Searching categories based on text input
       #    Use words of 2-3 letters for top level categories only,
       #    words of 4+ letters for any category.
-      add_group_to_response name: 'Click to select one or more categories', 
+      add_group_to_response name: 'Categories', 
         url: '/categories/', 
         replace: word,
         params: params,
         results: Category.where("#{"parent_id = 1 and " if word.length < 4}name like '%#{word.gsub(/[öäÖÄoaOA]/,'_')}%'")
       
       # 2. Searching manufacturers based on text input
-      add_group_to_response name: 'Click to select your car', 
+      add_group_to_response name: 'Car makers', 
         url: '/manufacturers/', 
         replace: word,
         params: params,
@@ -45,7 +45,7 @@ class SearchController < ApplicationController
       case g['type']
       when 'category'
         # 3. Subcategories of selected categories
-        add_group_to_response name: "Narrow your search in category #{g['name']}", 
+        add_group_to_response name: "Narrow inside #{g['name']}", 
           url: '/categories/', 
           params: params,
           replace_box: { type: :category, id: g['id']},
@@ -53,14 +53,14 @@ class SearchController < ApplicationController
 
         # 4. Supercategories of selected categories
         parent_category = Category.find(g['id']).parent
-        add_group_to_response name: "Widen your search in category #{g['name']}", 
+        add_group_to_response name: "Widen from #{g['name']}", 
           url: '/categories/', 
           params: params,
           replace_box: { type: :category, id: g['id']},
           results: [parent_category] unless parent_category.nil?
       when 'manufacturer'
         # 5. Models of selected manufacturers
-        add_group_to_response name: "Select model for #{g['name']}", 
+        add_group_to_response name: "Car models", 
           url: '/car_brands/', 
           params: params,
           replace_box: { type: :manufacturer, id: g['id']},
