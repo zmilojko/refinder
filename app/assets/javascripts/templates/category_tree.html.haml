@@ -1,7 +1,0 @@
-%span(ng-switch="item.type" ng-repeat="item in sub")
-  .search_section.list-group-item(search-item ng-switch-when="group_to_show")
-    {{item.name}}
-    .search_section_content(ng-if="item.sub && item.sub.length > 0")
-      .search_section_item(ng-include="'category_tree.html'" ng-init="sub = item.sub")
-  %button.btn.btn-default.btn-sm(search-item ng-click="add_group(item)" ng-switch-default)
-    {{item.name}}

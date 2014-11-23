@@ -16,12 +16,11 @@
             .search_input
               %input#search_control.search_text_box(type="search" placeholder="Search" ng-change="handle_search_criteria_change()" ng-model="criteria.text" ng-focus="input_focus_changed($event)")
             %span.glyphicon.glyphicon-search(ng-click="handle_search_button_click()")
-          -#.search_section.list-group-item(ng-if="showtips && !criteria.text")
-            %div
-              %p
-                Start type what you are searching for: your car model, product category 
-                or product name.
-          .search_section(ng-init="sub = result_info.groups" ng-include="'category_tree.html'" ng-if="result_info.groups")
+          %span.list-group-item(ng-repeat="item in result_info.groups")
+            %h4.list-group-item-heading.tip-header
+              {{item.name}}:
+            %button.btn.btn-default.btn-xs.tip_button(search-item ng-click="add_group(sub)" ng-repeat="sub in item.sub")
+              {{sub.name}}
       .col-sm-6
         #search_results.list-group
           .search_result.list-group-item(ng-repeat="product in result_info.products | limitTo:10")
