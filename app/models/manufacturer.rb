@@ -1,5 +1,5 @@
 class Manufacturer < ActiveRecord::Base
-  has_many :car_brands
+  has_many :car_brands, -> { order(name: :asc) }
   
   def box_hash
     { 

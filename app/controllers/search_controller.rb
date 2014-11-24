@@ -31,14 +31,14 @@ class SearchController < ApplicationController
         url: '/categories/', 
         replace: word,
         params: params,
-        results: Category.where("#{"parent_id = 1 and " if word.length < 4}name like '%#{word.gsub(/[öäÖÄoaOA]/,'_')}%'")
+        results: Category.where("#{"parent_id = 1 and " if word.length < 4}name like '%#{word.gsub(/[öäÖÄoaOA]/,'_')}%'").order(:name)
       
       # 2. Searching manufacturers based on text input
       add_group_to_response name: 'Car makers', 
         url: '/manufacturers/', 
         replace: word,
         params: params,
-        results: Manufacturer.where("name like '%#{word.gsub(/[öäÖÄoaOA]/,'_')}%'")
+        results: Manufacturer.where("name like '%#{word.gsub(/[öäÖÄoaOA]/,'_')}%'").order(:name)
     end
 
     params[:selected_groups].each do |g|
@@ -64,7 +64,7 @@ class SearchController < ApplicationController
           url: '/car_brands/', 
           params: params,
           replace_box: { type: :manufacturer, id: g['id']},
-          results: CarBrand.where(manufacturer_id: g['id'])
+          results: CarBrand.where(manufacturer_id: g['id']).order(:name)
       end
     end
     # 6. Products based on text input
