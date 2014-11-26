@@ -15,6 +15,9 @@
   -@category.children.each do |subcat|
     %p
       =link_to subcat.name, subcat
+    -subcat.children.each do |subsubcat|
+      %p(style="padding-left: 20px;")
+        =link_to subsubcat.name, subsubcat
 -else
   %p
     %strong This category has no subcategories
