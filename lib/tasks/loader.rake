@@ -78,8 +78,9 @@ def load_file f
   puts "Processing #{f.basename}"
   object_json = ""
   line_count = 0
+  line_count_total = %x{wc -l '#{f}'.to_i
   File.open(f).each do |line|
-    line_count+=1
+    line_count += 1
     case line.strip
     when "[", "]"
       # skip these lines if no object
@@ -92,7 +93,7 @@ def load_file f
       # start new object
       raise "object closed with no content" if object_json.blank?
       object_json << line.strip
-      print "processing line #{line_count}              "
+      print "processing line #{line_count} out of #{line_count_total}             "
       STDOUT.flush
       print "\r"
       process_object object_json.gsub(/,$/,"")
