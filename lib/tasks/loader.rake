@@ -1,6 +1,7 @@
 def process_object object_json
-  ActiveRecord::Base.transaction do
+  object_json.gsub!("\t","  ")
 
+  ActiveRecord::Base.transaction do
     h = JSON.parse object_json.downcase.gsub(",]","]").gsub(",}","}").gsub("Ä","ä").gsub("Ö","ö").gsub("Å","å")
     p_noticed = false
     p = Product.find_or_initialize_by(pid: h["pid"].to_s, shop: h["shop"])
