@@ -77,8 +77,9 @@ def load_file f
   puts `date`
   puts "Processing #{f.basename}"
   object_json = ""
-
+  line_count = 0
   File.open(f).each do |line|
+    line_count+=1
     case line.strip
     when "[", "]"
       # skip these lines if no object
@@ -91,6 +92,9 @@ def load_file f
       # start new object
       raise "object closed with no content" if object_json.blank?
       object_json << line.strip
+      print "processing line #{line_count}              "
+      STDOUT.flush
+      print "\r"
       process_object object_json.gsub(/,$/,"")
       object_json = ""
     else
@@ -110,12 +114,13 @@ namespace :loader do
     elsif f.directory?
       puts "Processing directory #{f.to_s}"
       Dir.new(f).entries.each do |g| 
-	unless File.directory? g
-  	  load_file(f.join g) 
-	end
+      unless File.directory? g
+        load_file(f.join g) 
+      end
       end
     elsif
       puts "Cannot find path #{f}"
     end
+    puts "Loading completed."
   end
 end
