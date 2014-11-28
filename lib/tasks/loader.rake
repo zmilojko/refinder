@@ -78,7 +78,7 @@ def load_file f
   puts "Processing #{f.basename}"
   object_json = ""
   line_count = 0
-  line_count_total = %x{wc -l '#{f}'.to_i
+  line_count_total = %x{wc -l '#{f}'}.to_i
   File.open(f).each do |line|
     line_count += 1
     case line.strip
